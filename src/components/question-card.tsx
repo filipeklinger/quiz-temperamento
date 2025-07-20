@@ -1,0 +1,66 @@
+"use client";
+
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Question, Answer } from "@/types";
+
+interface QuestionCardProps {
+  question: Question;
+  questionNumber: number;
+  totalQuestions: number;
+  onAnswerSelect: (answer: Answer) => void;
+  selectedAnswerId?: string;
+}
+
+export function QuestionCard({ 
+  question, 
+  questionNumber, 
+  totalQuestions, 
+  onAnswerSelect,
+  selectedAnswerId 
+}: QuestionCardProps) {
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(selectedAnswerId || null);
+
+  const handleAnswerClick = (answer: Answer) => {
+    setSelectedAnswer(answer.id);
+    onAnswerSelect(answer);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-muted-foreground">
+              Pergunta {questionNumber} de {totalQuestions}
+            </span>
+            <div className="flex space-x-1">
+              {Array.from({ length: totalQuestions }).map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${
+                    index < questionNumber ? "bg-primary" : "bg-muted"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+          <CardTitle className="text-xl">{question.title}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {question.answers.map((answer) => (
+            <Button
+              key={answer.id}
+              variant={selectedAnswer === answer.id ? "default" : "outline"}
+              className="w-full text-left h-auto p-4 justify-start"
+              onClick={() => handleAnswerClick(answer)}
+            >
+              <span className="text-wrap">{answer.text}</span>
+            </Button>
+          ))}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
