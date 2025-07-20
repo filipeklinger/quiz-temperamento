@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AnalyticsData, UserResult } from "@/types/analytics";
-import { ArrowLeft, Users, TrendingUp, Calendar } from "lucide-react";
+import { ArrowLeft, Users, TrendingUp, Calendar, Trash2 } from "lucide-react";
 import { 
   PieChart, 
   Pie, 
@@ -38,6 +38,8 @@ export default function AnalyticsPage() {
   const router = useRouter();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
 
   useEffect(() => {
     // Verificar autenticação
@@ -69,6 +71,31 @@ export default function AnalyticsPage() {
 
   const handleBack = () => {
     router.push("/config");
+  };
+
+  const handleClearData = async () => {
+    setIsClearing(true);
+    try {
+      const response = await fetch('/api/analytics/clear', {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Recarregar os dados após limpar
+        await fetchAnalytics();
+        setShowClearConfirm(false);
+        alert('Todos os resultados foram deletados com sucesso!');
+      } else {
+        alert('Erro ao deletar os resultados: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Error clearing data:', error);
+      alert('Erro ao deletar os resultados');
+    } finally {
+      setIsClearing(false);
+    }
   };
 
   if (isLoading) {
@@ -114,15 +141,28 @@ export default function AnalyticsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center mb-8">
-          <Button onClick={handleBack} variant="outline" className="mr-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Analytics do Quiz</h1>
-            <p className="text-gray-600">Análise dos resultados dos usuários</p>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <Button onClick={handleBack} variant="outline" className="mr-4">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Analytics do Quiz</h1>
+              <p className="text-gray-600">Análise dos resultados dos usuários</p>
+            </div>
           </div>
+          
+          {analytics && analytics.totalUsers > 0 && (
+            <Button 
+              onClick={() => setShowClearConfirm(true)} 
+              variant="destructive"
+              className="ml-4"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Limpar Dados
+            </Button>
+          )}
         </div>
 
         {/* Cards de Resumo */}
@@ -288,6 +328,51 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Modal de Confirmação para Limpar Dados */}
+      {showClearConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center mb-4">
+              <Trash2 className="w-6 h-6 text-red-500 mr-3" />
+              <h2 className="text-xl font-bold text-gray-900">Confirmar Exclusão</h2>
+            </div>
+            
+            <p className="text-gray-600 mb-6">
+              Tem certeza que deseja deletar <strong>todos os {analytics?.totalUsers} resultados</strong> do banco de dados? 
+              <br /><br />
+              <span className="text-red-600 font-medium">Esta ação não pode ser desfeita!</span>
+            </p>
+            
+            <div className="flex gap-3 justify-end">
+              <Button 
+                onClick={() => setShowClearConfirm(false)} 
+                variant="outline"
+                disabled={isClearing}
+              >
+                Cancelar
+              </Button>
+              <Button 
+                onClick={handleClearData} 
+                variant="destructive"
+                disabled={isClearing}
+              >
+                {isClearing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Deletando...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Sim, Deletar Tudo
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
