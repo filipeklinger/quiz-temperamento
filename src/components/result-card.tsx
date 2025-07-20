@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { QuizResult, Temperament } from "@/types";
 import { useAccessibility } from "@/contexts/AccessibilityContext";
 import { Share2, RefreshCw } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 interface ResultCardProps {
   result: QuizResult;
@@ -17,21 +18,25 @@ const temperamentInfo = {
   [Temperament.SANGUINEO]: {
     title: "Sanguíneo",
     color: "bg-red-500",
+    chartColor: "#ef4444",
     description: "Pessoa extrovertida, otimista e sociável"
   },
   [Temperament.COLERICO]: {
     title: "Colérico", 
     color: "bg-yellow-500",
+    chartColor: "#eab308",
     description: "Pessoa ambiciosa, enérgica e determinada"
   },
   [Temperament.MELANCOLICO]: {
     title: "Melancólico",
-    color: "bg-blue-500", 
+    color: "bg-blue-500",
+    chartColor: "#3b82f6", 
     description: "Pessoa analítica, criativa e perfeccionista"
   },
   [Temperament.FLEUMATICO]: {
     title: "Fleumático",
     color: "bg-green-500",
+    chartColor: "#22c55e",
     description: "Pessoa calma, leal e cooperativa"
   }
 };
@@ -39,6 +44,20 @@ const temperamentInfo = {
 export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
   const { getFontSizeClass } = useAccessibility();
   const dominantInfo = temperamentInfo[result.dominantTemperament];
+  
+  // Preparar dados para o gráfico de pizza
+  const chartData = Object.entries(result.temperamentScores).map(([temperament, score]) => {
+    const info = temperamentInfo[temperament as Temperament];
+    const total = Object.values(result.temperamentScores).reduce((a, b) => a + b, 0);
+    const percentage = Math.round((score / total) * 100);
+    
+    return {
+      name: info.title,
+      value: percentage,
+      color: info.chartColor,
+      score: score
+    };
+  }).sort((a, b) => b.value - a.value); // Ordenar por valor decrescente
   
   const handleShare = async () => {
     if (navigator.share) {
@@ -83,20 +102,60 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
             <p className={`leading-relaxed ${getFontSizeClass()}`}>{result.description}</p>
           </div>
           
-          <div className="space-y-4">
-            <h4 className={`font-semibold ${getFontSizeClass()}`}>Distribuição dos Temperamentos:</h4>
-            {Object.entries(result.temperamentScores).map(([temperament, score]) => {
-              const info = temperamentInfo[temperament as Temperament];
-              const percentage = Math.round((score / Object.values(result.temperamentScores).reduce((a, b) => a + b, 0)) * 100);
-              
-              return (
-                <div key={temperament} className="flex items-center space-x-4">
-                  <div className={`w-5 h-5 ${info.color} rounded`}></div>
-                  <span className={`flex-1 ${getFontSizeClass()}`}>{info.title}</span>
-                  <span className={`text-muted-foreground ${getFontSizeClass()}`}>{percentage}%</span>
+          <div className="space-y-6">
+            <h4 className={`font-semibold text-center ${getFontSizeClass()}`}>
+              Distribuição dos Temperamentos
+            </h4>
+            
+            {/* Gráfico de Pizza */}
+            <div className="w-full h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    innerRadius={40}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value: number) => [`${value}%`, 'Porcentagem']}
+                    labelFormatter={(label: string) => `${label}`}
+                  />
+                  <Legend 
+                    verticalAlign="bottom" 
+                    height={36}
+                    formatter={(value: string, entry: any) => (
+                      <span className={getFontSizeClass()}>{value}</span>
+                    )}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            
+            {/* Lista detalhada */}
+            <div className="grid grid-cols-2 gap-4">
+              {chartData.map((item) => (
+                <div key={item.name} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
+                  <div 
+                    className="w-4 h-4 rounded-full" 
+                    style={{ backgroundColor: item.color }}
+                  ></div>
+                  <div className="flex-1">
+                    <div className={`font-medium ${getFontSizeClass()}`}>{item.name}</div>
+                    <div className={`text-muted-foreground text-sm ${getFontSizeClass()}`}>
+                      {item.value}% ({item.score} pontos)
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
 
           <div className="flex space-x-4 pt-6">
