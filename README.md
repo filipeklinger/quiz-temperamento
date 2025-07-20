@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quiz de Perfil com Base em Idade e Respostas
+## 🎯 Objetivo do Projeto
+Criar uma aplicação web responsiva usando Next.js que permita ao usuário responder a um quiz composto por múltiplas perguntas. Com base nas respostas escolhidas e na idade informada pelo usuário, será calculado um resultado personalizado (perfil), que será exibido ao final do quiz.
 
-## Getting Started
+## Stack do Projeto
+- Frontend: Next.js + Tailwind CSS
+- Backend/API: API Routes do próprio Next.js
+- Banco de Dados: PostgreSQL (via Vercel Postgres)
+- Auth (simples): JWT (sem provedor externo por enquanto)
+- ORM: Drizzle ORM
 
-First, run the development server:
+## 🧭 Fluxo de Navegação
+- Página Inicial (/)
+    - Breve explicação sobre o quiz.
+    - Campo para o usuário digitar sua data de nascimento dd/mm/yyyy.
+    - Botão "Iniciar Quiz".
+- Página do Quiz (/quiz)
+    - Lista de perguntas uma por uma (cada pergunta deve ocupar a tela toda com um botao de proxima questao).
+    - Cada pergunta apresenta múltiplas alternativas (apenas 1 pode ser selecionada).
+    - Botão para avançar ou concluir.
+    - da lista de perguntas o usuario deve responder 3 de cada grupo.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Página de Resultado (/result)
+    - Resultado calculado com base nas respostas + idade.
+    - Mensagem com título do perfil e breve descrição.
+    - Botão para reiniciar o quiz ou compartilhar link.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Paginas protegidas
+- Admin Login (/login)
+    - Tela de login básica
+- Pagina de edicao de perguntas (/config)
+    - botao de cadastrar nova pergunta
+    - lista de todas as perguntas cadastradas (com botao de editar e excluir)
+- Pagina de cadastro de perguntas (/question)
+- Campo de titulo da pergunta
+- campo para inserção das respostas (sempre serao 4 respostas, uma para cada temperamento. a associacao de temperamento a resposta é a parte mais importante e deve ser visivel apenas para o administrador e sera usada para a geração do resultado final)
