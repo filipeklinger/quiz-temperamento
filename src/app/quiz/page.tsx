@@ -4,12 +4,22 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { QuestionCard } from "@/components/question-card";
 import { Button } from "@/components/ui/button";
+import { AccessibilityControls } from "@/components/accessibility-controls";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { Question, Answer, QuizResponse } from "@/types";
 import { mockQuestions } from "@/lib/mock-data";
 import { selectQuestionsForQuiz, calculateQuizResult } from "@/lib/quiz-utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function QuizPage() {
+  return (
+    <AccessibilityProvider>
+      <QuizContent />
+    </AccessibilityProvider>
+  );
+}
+
+function QuizContent() {
   const router = useRouter();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -102,6 +112,8 @@ export default function QuizPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <AccessibilityControls />
+      
       <QuestionCard
         question={currentQuestion}
         questionNumber={currentQuestionIndex + 1}
@@ -117,8 +129,9 @@ export default function QuizPage() {
               onClick={handlePrevious}
               variant="outline"
               size="lg"
+              className="text-lg px-6 py-3"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="w-5 h-5 mr-2" />
               Anterior
             </Button>
           )}
@@ -127,9 +140,10 @@ export default function QuizPage() {
             <Button
               onClick={handleNext}
               size="lg"
+              className="text-lg px-6 py-3"
             >
               {currentQuestionIndex === questions.length - 1 ? "Finalizar" : "Próxima"}
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           )}
         </div>
