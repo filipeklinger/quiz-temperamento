@@ -4,9 +4,19 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ResultCard } from "@/components/result-card";
 import { Button } from "@/components/ui/button";
+import { AccessibilityControls } from "@/components/accessibility-controls";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { QuizResult } from "@/types";
 
 export default function ResultPage() {
+  return (
+    <AccessibilityProvider>
+      <ResultContent />
+    </AccessibilityProvider>
+  );
+}
+
+function ResultContent() {
   const router = useRouter();
   const [result, setResult] = useState<QuizResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -97,6 +107,7 @@ export default function ResultPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <AccessibilityControls />
       <ResultCard 
         result={result} 
         onRestart={handleRestart} 
