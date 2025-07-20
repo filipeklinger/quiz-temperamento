@@ -1,5 +1,6 @@
 
-import prisma from '../lib/prisma';
+import { db } from './index';
+import { questions, answers } from './schema';
 import { mockQuestions } from '../lib/mock-data';
 
 async function seed() {
@@ -8,28 +9,25 @@ async function seed() {
   try {
     // Limpar dados existentes
     console.log('🧹 Cleaning existing data...');
-    await prisma.answer.deleteMany();
-    await prisma.question.deleteMany();
+    await db.delete(answers);
+    await db.delete(questions);
 
     console.log('📝 Inserting questions and answers...');
 
     for (const mockQuestion of mockQuestions) {
-      const insertedQuestion = await prisma.question.create({
-        data: {
-          title: mockQuestion.title,
-          group: mockQuestion.group,
-          isActive: true,
-        },
-      });
+      const [insertedQuestion] = await db.insert(questions).values({
+        title: mockQuestion.title,
+        group: mockQuestion.group,
+        isActive: 1,
+      }).returning();
+      
       console.log(`✅ Inserted question: ${insertedQuestion.title}`);
 
       for (const mockAnswer of mockQuestion.answers) {
-        await prisma.answer.create({
-          data: {
-            questionId: insertedQuestion.id,
-            text: mockAnswer.text,
-            temperament: mockAnswer.temperament,
-          },
+        await db.insert(answers).values({
+          questionId: insertedQuestion.id,
+          text: mockAnswer.text,
+          temperament: mockAnswer.temperament,
         });
       }
       console.log(`✅ Inserted ${mockQuestion.answers.length} answers for question`);
@@ -45,14 +43,13 @@ async function seed() {
 }
 
 // Executar seed se chamado diretamente
-
 if (require.main === module) {
   seed()
     .then(() => {
       console.log('✅ Seed completed');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.error('❌ Seed failed:', error);
       process.exit(1);
     });
