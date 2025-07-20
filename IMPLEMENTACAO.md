@@ -44,11 +44,20 @@
    - ✅ 4 respostas (uma para cada temperamento)
    - ✅ Validação de campos obrigatórios
 
+7. **Analytics (/analytics)**
+   - ✅ Gráfico de pizza com distribuição de temperamentos
+   - ✅ Gráfico de barras com distribuição de idades
+   - ✅ Cards com estatísticas resumidas
+   - ✅ Tabela completa com todos os resultados
+   - ✅ Proteção por autenticação admin
+
 ### 🧠 Lógica de Negócio
 - **Cálculo de Temperamento**: Algoritmo que conta respostas por temperamento
 - **Seleção de Perguntas**: Sistema que garante 3 perguntas de cada grupo
 - **Geração de Resultado**: Criação de título e descrição baseados na idade e temperamento
 - **Validação de Data**: Parser e validador para formato brasileiro DD/MM/YYYY
+- **Persistência de Dados**: Sistema de salvamento automático de resultados
+- **Analytics em Tempo Real**: Cálculo dinâmico de estatísticas dos usuários
 
 ### 🎨 Sistema de Design
 - **Tailwind CSS**: Estilização responsiva e consistente
@@ -65,6 +74,15 @@
 ### 💾 Armazenamento Local
 - **localStorage**: Dados temporários do usuário e resultado
 - **Sessão**: Controle de progresso do quiz e autenticação admin
+- **API Routes**: Sistema de persistência para resultados dos usuários
+- **Arquivo Temporário**: Simulação de banco de dados para demonstração
+
+### 📊 Sistema de Analytics
+- **Gráficos Interativos**: Recharts para visualização de dados
+- **Distribuição de Temperamentos**: Gráfico de pizza com cores por temperamento
+- **Distribuição de Idades**: Gráfico de barras por faixas etárias
+- **Tabela de Dados**: Lista completa de todos os resultados
+- **Métricas em Tempo Real**: Cálculos dinâmicos de estatísticas
 
 ## 🏃‍♂️ Como executar
 
@@ -83,14 +101,23 @@ http://localhost:3000
 - **Frontend**: Next.js 15 + React 19 + TypeScript
 - **Estilização**: Tailwind CSS 4
 - **Utilitários**: Lucide React (ícones), date-fns, zod
+- **Gráficos**: Recharts para visualização de dados
+- **API**: Next.js API Routes para backend
 - **Desenvolvimento**: Turbopack (build tool)
 
 ## 📋 Próximos Passos (Para Produção)
 
 ### Backend/API
-- [ ] Implementar Drizzle ORM + PostgreSQL
-- [ ] API Routes para CRUD de perguntas
-- [ ] Sistema de autenticação JWT
+- [x] **Drizzle ORM + PostgreSQL** ✅
+  - Schema completo do banco de dados
+  - Configuração com Vercel Postgres
+  - Migrations e seeds automatizados
+- [x] **API Routes implementadas** ✅
+  - `/api/results` - Salvar e buscar resultados
+  - `/api/analytics` - Gerar dados para análise
+  - `/api/questions` - CRUD de perguntas
+  - `/api/questions/[id]` - Gerenciar pergunta específica
+- [ ] Sistema de autenticação JWT real
 - [ ] Middleware de proteção de rotas
 
 ### Melhorias
@@ -101,9 +128,30 @@ http://localhost:3000
 - [ ] Múltiplos idiomas
 
 ### Banco de Dados
-- [ ] Schema das tabelas (users, questions, answers, quiz_sessions)
-- [ ] Migrations e seeds
-- [ ] Backup e restore
+- [x] **Schema das tabelas** ✅
+  - `questions` - Perguntas do quiz
+  - `answers` - Respostas das perguntas  
+  - `quiz_results` - Resultados dos usuários
+  - `quiz_sessions` - Sessões de quiz (preparado)
+  - `users` - Usuários (preparado)
+- [x] **Migrations e seeds** ✅
+- [x] **Configuração Vercel Postgres** ✅
+- [ ] Backup e restore automatizado
+
+## 🎮 Como Testar as Novas Funcionalidades
+
+### 📊 Testando o Sistema de Analytics
+1. **Acesse a página inicial** e faça alguns quizzes com diferentes idades
+2. **Faça login como admin** (admin@temperamento.com / admin123)
+3. **Vá para Configuração** e clique em "Analytics"
+4. **Visualize os gráficos** de temperamentos e idades
+5. **Confira a tabela** com todos os resultados salvos
+
+### 🔄 Fluxo Completo de Dados
+1. Usuário faz o quiz → Resultado é calculado
+2. Dados são **automaticamente salvos** na API
+3. Admin pode ver **analytics em tempo real**
+4. Gráficos são **atualizados dinamicamente**
 
 ## 🎮 Credenciais de Teste
 - **Admin Email**: admin@temperamento.com

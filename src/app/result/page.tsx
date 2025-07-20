@@ -14,15 +14,48 @@ export default function ResultPage() {
   useEffect(() => {
     // Recuperar resultado do localStorage
     const storedResult = localStorage.getItem("quizResult");
-    if (!storedResult) {
+    const storedUserData = localStorage.getItem("quizUserData");
+    
+    if (!storedResult || !storedUserData) {
       router.push("/");
       return;
     }
 
     const parsedResult = JSON.parse(storedResult);
+    const parsedUserData = JSON.parse(storedUserData);
+    
     setResult(parsedResult);
+    
+    // Salvar resultado no banco de dados
+    saveResultToDatabase(parsedResult, parsedUserData);
+    
     setIsLoading(false);
   }, [router]);
+
+  const saveResultToDatabase = async (result: QuizResult, userData: any) => {
+    try {
+      const response = await fetch('/api/results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          birthDate: userData.birthDate,
+          age: result.age,
+          dominantTemperament: result.dominantTemperament,
+          temperamentScores: result.temperamentScores
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        console.error('Failed to save result:', data.error);
+      }
+    } catch (error) {
+      console.error('Error saving result:', error);
+    }
+  };
 
   const handleRestart = () => {
     // Limpar dados do localStorage

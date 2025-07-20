@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Question, TemperamentGroup, Temperament } from "@/types";
 import { mockQuestions } from "@/lib/mock-data";
-import { Plus, Edit, Trash2, LogOut } from "lucide-react";
+import { Plus, Edit, Trash2, LogOut, BarChart3 } from "lucide-react";
 
 const temperamentLabels = {
   [Temperament.SANGUINEO]: "Sanguíneo",
@@ -49,6 +49,10 @@ export default function ConfigPage() {
     router.push("/question");
   };
 
+  const handleAnalytics = () => {
+    router.push("/analytics");
+  };
+
   const handleEditQuestion = (questionId: string) => {
     router.push(`/question?id=${questionId}`);
   };
@@ -89,6 +93,10 @@ export default function ConfigPage() {
             <p className="text-gray-600">Gerencie as perguntas do quiz de temperamento</p>
           </div>
           <div className="flex space-x-4">
+            <Button onClick={handleAnalytics} variant="outline">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Analytics
+            </Button>
             <Button onClick={handleNewQuestion}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Pergunta
