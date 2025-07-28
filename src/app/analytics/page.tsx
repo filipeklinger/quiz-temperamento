@@ -147,9 +147,9 @@ export default function AnalyticsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <Button onClick={handleBack} variant="outline" className="mr-4">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <Button onClick={handleBack} variant="outline">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar
             </Button>
@@ -163,7 +163,7 @@ export default function AnalyticsPage() {
             <Button 
               onClick={() => setShowClearConfirm(true)} 
               variant="destructive"
-              className="ml-4"
+              className="self-start sm:self-auto"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Limpar Dados
