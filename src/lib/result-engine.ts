@@ -50,7 +50,7 @@ export const RESULT_CONFIGURATIONS: ResultRule[] = [
       { type: "pure_temperament", temperament: Temperament.SANGUINEO }
     ],
     result: {
-      title: "O Comunicador Natural (Puro)",
+      title: "O Comunicador Natural",
       description: "Você possui um temperamento sanguíneo muito bem definido, sendo naturalmente otimista, sociável e energético.",
       characteristics: [
         "Extremamente sociável e comunicativo",
@@ -81,7 +81,7 @@ export const RESULT_CONFIGURATIONS: ResultRule[] = [
       { type: "pure_temperament", temperament: Temperament.COLERICO }
     ],
     result: {
-      title: "O Líder Nato (Puro)",
+      title: "O Líder Nato",
       description: "Você possui um temperamento colérico muito bem definido, sendo naturalmente determinado, ambicioso e orientado a resultados.",
       characteristics: [
         "Liderança natural e assertividade",
@@ -112,7 +112,7 @@ export const RESULT_CONFIGURATIONS: ResultRule[] = [
       { type: "pure_temperament", temperament: Temperament.MELANCOLICO }
     ],
     result: {
-      title: "O Pensador Profundo (Puro)",
+      title: "O Pensador Profundo",
       description: "Você possui um temperamento melancólico muito bem definido, sendo naturalmente analítico, criativo e perfeccionista.",
       characteristics: [
         "Analítico e detalhista",
@@ -143,7 +143,7 @@ export const RESULT_CONFIGURATIONS: ResultRule[] = [
       { type: "pure_temperament", temperament: Temperament.FLEUMATICO }
     ],
     result: {
-      title: "O Pacificador (Puro)",
+      title: "O Pacificador",
       description: "Você possui um temperamento fleumático muito bem definido, sendo naturalmente calmo, leal e equilibrado.",
       characteristics: [
         "Calmo e equilibrado",
