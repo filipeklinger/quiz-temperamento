@@ -104,7 +104,7 @@ export default function AnalyticsPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Carregando analytics...</p>
+          <p className="text-gray-900 dark:text-gray-100">Carregando analytics...</p>
         </div>
       </div>
     );
@@ -114,7 +114,7 @@ export default function AnalyticsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p>Erro ao carregar dados de analytics.</p>
+          <p className="text-gray-900 dark:text-gray-100">Erro ao carregar dados de analytics.</p>
           <Button onClick={() => router.push("/config")} className="mt-4">
             Voltar
           </Button>
@@ -136,11 +136,16 @@ export default function AnalyticsPage() {
   }));
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR');
+    // Usar formatação consistente que não varia entre servidor e cliente
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
@@ -149,8 +154,8 @@ export default function AnalyticsPage() {
               Voltar
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Analytics do Quiz</h1>
-              <p className="text-gray-600">Análise dos resultados dos usuários</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Analytics do Quiz</h1>
+              <p className="text-gray-600 dark:text-gray-300">Análise dos resultados dos usuários</p>
             </div>
           </div>
           
@@ -337,7 +342,7 @@ export default function AnalyticsPage() {
                 </thead>
                 <tbody>
                   {analytics.results.map((result) => (
-                    <tr key={result.id} className="border-b hover:bg-gray-50">
+                    <tr key={result.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
                       <td className="p-2">{formatDate(result.completedAt.toString())}</td>
                       <td className="p-2">{formatDate(result.birthDate.toString())}</td>
                       <td className="p-2">{result.age} anos</td>
@@ -362,7 +367,7 @@ export default function AnalyticsPage() {
                   ))}
                   {analytics.results.length === 0 && (
                     <tr>
-                      <td colSpan={7} className="p-4 text-center text-gray-500">
+                      <td colSpan={7} className="p-4 text-center text-gray-500 dark:text-gray-400">
                         Nenhum resultado encontrado
                       </td>
                     </tr>
@@ -377,13 +382,13 @@ export default function AnalyticsPage() {
       {/* Modal de Confirmação para Limpar Dados */}
       {showClearConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex items-center mb-4">
               <Trash2 className="w-6 h-6 text-red-500 mr-3" />
-              <h2 className="text-xl font-bold text-gray-900">Confirmar Exclusão</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Confirmar Exclusão</h2>
             </div>
             
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
               Tem certeza que deseja deletar <strong>todos os {analytics?.totalUsers} resultados</strong> do banco de dados? 
               <br /><br />
               <span className="text-red-600 font-medium">Esta ação não pode ser desfeita!</span>

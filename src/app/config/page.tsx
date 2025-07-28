@@ -69,7 +69,7 @@ export default function ConfigPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Carregando configurações...</p>
+          <p className="text-gray-900 dark:text-gray-100">Carregando configurações...</p>
         </div>
       </div>
     );
@@ -85,12 +85,12 @@ export default function ConfigPage() {
   }, {} as Record<TemperamentGroup, Question[]>);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Configuração de Perguntas</h1>
-            <p className="text-gray-600">Gerencie as perguntas do quiz de temperamento</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Configuração de Perguntas</h1>
+            <p className="text-gray-600 dark:text-gray-300">Gerencie as perguntas do quiz de temperamento</p>
           </div>
           <div className="flex space-x-4">
             <Button onClick={handleAnalytics} variant="outline">
@@ -122,7 +122,7 @@ export default function ConfigPage() {
                   {groupQuestions.map((question) => (
                     <div
                       key={question.id}
-                      className="border rounded-lg p-4 bg-white"
+                      className="border rounded-lg p-4 bg-card text-card-foreground"
                     >
                       <div className="flex justify-between items-start mb-3">
                         <h3 className="font-medium text-lg">{question.title}</h3>

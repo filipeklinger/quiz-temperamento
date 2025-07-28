@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Question, Answer } from "@/types";
 import { useAccessibility } from "@/contexts/AccessibilityContext";
-import { shuffleArray } from "@/lib/utils";
+import { shuffleArray, shuffleArrayWithSeed } from "@/lib/utils";
 
 interface QuestionCardProps {
   question: Question;
@@ -23,17 +23,24 @@ export function QuestionCard({
   selectedAnswerId 
 }: QuestionCardProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(selectedAnswerId || null);
+  const [shuffledAnswers, setShuffledAnswers] = useState<Answer[]>([]);
+  const [isClient, setIsClient] = useState(false);
   const { getFontSizeClass } = useAccessibility();
 
-  // Embaralhar as respostas uma única vez quando a pergunta mudar
-  const shuffledAnswers = useMemo(() => {
-    return shuffleArray(question.answers);
-  }, [question.id]); // Dependência apenas do ID da pergunta
+  // Garantir que estamos no cliente antes de fazer o shuffle
+  useEffect(() => {
+    setIsClient(true);
+    // Usar shuffle determinístico baseado no ID da pergunta
+    setShuffledAnswers(shuffleArrayWithSeed(question.answers, question.id));
+  }, [question.id, question.answers]);
 
   const handleAnswerClick = (answer: Answer) => {
     setSelectedAnswer(answer.id);
     onAnswerSelect(answer);
   };
+
+  // Se ainda não estamos no cliente, usar a ordem original para evitar hydration mismatch
+  const answersToRender = isClient ? shuffledAnswers : question.answers;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -59,7 +66,7 @@ export function QuestionCard({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {shuffledAnswers.map((answer) => (
+          {answersToRender.map((answer) => (
             <Button
               key={answer.id}
               variant={selectedAnswer === answer.id ? "default" : "outline"}

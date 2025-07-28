@@ -17,8 +17,20 @@ export function calculateAge(birthDate: Date): number {
   return age;
 }
 
+export function formatBirthDate(date: Date): string {
+  // Usar formatação consistente que não varia entre servidor e cliente
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 export function formatDate(date: Date): string {
-  return date.toLocaleDateString('pt-BR');
+  // Usar formatação consistente que não varia entre servidor e cliente
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
 export function parseBrazilianDate(dateStr: string): Date | null {
@@ -51,6 +63,49 @@ export function shuffleArray<T>(array: T[]): T[] {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
+  return shuffled;
+}
+
+/**
+ * Gerador de números pseudo-aleatórios baseado em seed
+ * Implementação simples de LCG (Linear Congruential Generator)
+ */
+class SeededRandom {
+  private seed: number;
+
+  constructor(seed: number) {
+    this.seed = seed;
+  }
+
+  next(): number {
+    this.seed = (this.seed * 9301 + 49297) % 233280;
+    return this.seed / 233280;
+  }
+}
+
+/**
+ * Embaralha um array usando uma seed determinística
+ * @param array Array para embaralhar
+ * @param seed Seed para determinismo
+ * @returns Novo array embaralhado
+ */
+export function shuffleArrayWithSeed<T>(array: T[], seed: string): T[] {
+  const shuffled = [...array];
+  
+  // Converter seed string em número
+  let numericSeed = 0;
+  for (let i = 0; i < seed.length; i++) {
+    numericSeed = ((numericSeed << 5) - numericSeed + seed.charCodeAt(i)) & 0xffffffff;
+  }
+  
+  const rng = new SeededRandom(Math.abs(numericSeed));
+  
+  // Fisher-Yates shuffle com seed
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(rng.next() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  
   return shuffled;
 }
 
