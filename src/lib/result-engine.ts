@@ -314,7 +314,10 @@ export class QuizResultEngine {
       temperamentScores: this.convertPercentagesToScores(percentages, responses.length),
       age,
       title: personalizedResult.title,
-      description: personalizedResult.description
+      description: personalizedResult.description,
+      characteristics: personalizedResult.characteristics,
+      strengths: personalizedResult.strengths,
+      developmentAreas: personalizedResult.developmentAreas
     };
   }
 

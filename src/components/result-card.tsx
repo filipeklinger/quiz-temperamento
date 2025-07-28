@@ -101,6 +101,62 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
             </p>
             <p className={`leading-relaxed ${getFontSizeClass()}`}>{result.description}</p>
           </div>
+
+          {/* Seções de características, forças e áreas de desenvolvimento */}
+          {(result.characteristics || result.strengths || result.developmentAreas) && (
+            <div className="space-y-6">
+              {result.characteristics && result.characteristics.length > 0 && (
+                <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-blue-500">
+                  <h4 className={`font-semibold mb-4 text-gray-800 flex items-center ${getFontSizeClass()}`}>
+                    <span className="text-blue-500 mr-2">🎯</span>
+                    Características Principais
+                  </h4>
+                  <ul className="space-y-2">
+                    {result.characteristics.map((characteristic, index) => (
+                      <li key={index} className={`flex items-start space-x-2 ${getFontSizeClass()}`}>
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span className="text-gray-700">{characteristic}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {result.strengths && result.strengths.length > 0 && (
+                <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-green-500">
+                  <h4 className={`font-semibold mb-4 text-gray-800 flex items-center ${getFontSizeClass()}`}>
+                    <span className="text-green-500 mr-2">💪</span>
+                    Suas Forças
+                  </h4>
+                  <ul className="space-y-2">
+                    {result.strengths.map((strength, index) => (
+                      <li key={index} className={`flex items-start space-x-2 ${getFontSizeClass()}`}>
+                        <span className="text-green-500 mt-1">•</span>
+                        <span className="text-gray-700">{strength}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {result.developmentAreas && result.developmentAreas.length > 0 && (
+                <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-orange-500">
+                  <h4 className={`font-semibold mb-4 text-gray-800 flex items-center ${getFontSizeClass()}`}>
+                    <span className="text-orange-500 mr-2">🚀</span>
+                    Áreas de Desenvolvimento
+                  </h4>
+                  <ul className="space-y-2">
+                    {result.developmentAreas.map((area, index) => (
+                      <li key={index} className={`flex items-start space-x-2 ${getFontSizeClass()}`}>
+                        <span className="text-orange-500 mt-1">•</span>
+                        <span className="text-gray-700">{area}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
           
           <div className="space-y-6">
             <h4 className={`font-semibold text-center ${getFontSizeClass()}`}>

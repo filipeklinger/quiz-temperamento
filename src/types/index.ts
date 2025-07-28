@@ -38,6 +38,9 @@ export interface QuizResult {
   age: number;
   description: string;
   title: string;
+  characteristics?: string[];
+  strengths?: string[];
+  developmentAreas?: string[];
   totalQuestions?: number;
   timeToComplete?: number; // em segundos
   startedAt?: Date;

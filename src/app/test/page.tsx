@@ -11,15 +11,34 @@ export default function TestPage() {
     }));
 
     localStorage.setItem("quizResult", JSON.stringify({
-      title: "Seu temperamento dominante: Sanguíneo",
-      description: "Você é uma pessoa extrovertida, otimista e sociável. Gosta de estar com pessoas e se adapta facilmente a diferentes situações sociais.",
+      title: "O Comunicador Natural",
+      description: "Você possui um temperamento sanguíneo muito bem definido, sendo naturalmente otimista, sociável e energético.",
       dominantTemperament: "sanguineo",
       temperamentScores: {
         sanguineo: 12,
         colerico: 8,
         melancolico: 6,
         fleumatico: 4
-      }
+      },
+      age: 34,
+      characteristics: [
+        "Extremamente sociável e comunicativo",
+        "Otimista e entusiástico",
+        "Espontâneo e expressivo",
+        "Gosta de ser o centro das atenções"
+      ],
+      strengths: [
+        "Capacidade excepcional de motivar outros",
+        "Facilidade para fazer novos amigos",
+        "Adaptabilidade em situações sociais",
+        "Criatividade e inovação"
+      ],
+      developmentAreas: [
+        "Desenvolver mais disciplina e foco",
+        "Melhorar a gestão do tempo",
+        "Praticar a escuta ativa",
+        "Trabalhar a persistência em projetos longos"
+      ]
     }));
 
     // Redirecionar para a página de resultado após um pequeno delay
