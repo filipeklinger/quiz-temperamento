@@ -18,6 +18,9 @@ export async function POST(request: NextRequest) {
       age: data.age,
       dominantTemperament: data.dominantTemperament,
       temperamentScores: data.temperamentScores,
+      totalQuestions: data.totalQuestions || 12,
+      timeToComplete: data.timeToComplete,
+      startedAt: data.startedAt ? new Date(data.startedAt) : null,
       userAgent,
       ipAddress,
     }).returning();

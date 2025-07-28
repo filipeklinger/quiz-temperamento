@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AnalyticsData, UserResult } from "@/types/analytics";
+import { formatTime } from "@/lib/utils";
 import { ArrowLeft, Users, TrendingUp, Calendar, Trash2 } from "lucide-react";
 import { 
   PieChart, 
@@ -166,7 +167,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Cards de Resumo */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total de Usuários</CardTitle>
@@ -212,6 +213,46 @@ export default function AnalyticsPage() {
               </div>
               <p className="text-xs text-muted-foreground">
                 Idade mais frequente nos testes
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Tempo Médio</CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {(() => {
+                  const timesWithCompletion = analytics.results.filter(r => r.timeToComplete);
+                  if (timesWithCompletion.length === 0) return 'N/A';
+                  const avgTime = timesWithCompletion.reduce((sum, r) => sum + (r.timeToComplete || 0), 0) / timesWithCompletion.length;
+                  return formatTime(Math.round(avgTime));
+                })()}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Tempo médio para completar o quiz
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Taxa de Conclusão</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {(() => {
+                  const totalWithQuestions = analytics.results.filter(r => r.totalQuestions);
+                  if (totalWithQuestions.length === 0) return 'N/A';
+                  const avgQuestions = totalWithQuestions.reduce((sum, r) => sum + (r.totalQuestions || 0), 0) / totalWithQuestions.length;
+                  return `${Math.round((avgQuestions / 12) * 100)}%`;
+                })()}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Porcentagem média de conclusão
               </p>
             </CardContent>
           </Card>
@@ -289,6 +330,8 @@ export default function AnalyticsPage() {
                     <th className="text-left p-2">Data de Nascimento</th>
                     <th className="text-left p-2">Idade</th>
                     <th className="text-left p-2">Temperamento Dominante</th>
+                    <th className="text-left p-2">Perguntas Respondidas</th>
+                    <th className="text-left p-2">Tempo para Completar</th>
                     <th className="text-left p-2">Pontuações</th>
                   </tr>
                 </thead>
@@ -306,6 +349,8 @@ export default function AnalyticsPage() {
                           {temperamentLabels[result.dominantTemperament as keyof typeof temperamentLabels]}
                         </span>
                       </td>
+                      <td className="p-2">{result.totalQuestions || 'N/A'}</td>
+                      <td className="p-2">{formatTime(result.timeToComplete)}</td>
                       <td className="p-2 text-sm">
                         {Object.entries(result.temperamentScores).map(([temp, score]) => (
                           <span key={temp} className="mr-2">
@@ -317,7 +362,7 @@ export default function AnalyticsPage() {
                   ))}
                   {analytics.results.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="p-4 text-center text-gray-500">
+                      <td colSpan={7} className="p-4 text-center text-gray-500">
                         Nenhum resultado encontrado
                       </td>
                     </tr>

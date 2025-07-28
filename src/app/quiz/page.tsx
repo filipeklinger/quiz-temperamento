@@ -26,6 +26,7 @@ function QuizContent() {
   const [responses, setResponses] = useState<QuizResponse[]>([]);
   const [userData, setUserData] = useState<{ birthDate: string; age: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [startTime, setStartTime] = useState<Date | null>(null);
 
   useEffect(() => {
     // Verificar se há dados do usuário
@@ -41,6 +42,11 @@ function QuizContent() {
     // Selecionar perguntas para o quiz
     const selectedQuestions = selectQuestionsForQuiz(mockQuestions);
     setQuestions(selectedQuestions);
+    
+    // Registrar tempo de início
+    const quizStartTime = new Date();
+    setStartTime(quizStartTime);
+    
     setIsLoading(false);
   }, [router]);
 
@@ -63,9 +69,21 @@ function QuizContent() {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // Quiz completo, calcular resultado
-      if (userData) {
+      if (userData && startTime) {
+        const endTime = new Date();
+        const timeToComplete = Math.round((endTime.getTime() - startTime.getTime()) / 1000); // em segundos
+        
         const result = calculateQuizResult(responses, userData.age);
-        localStorage.setItem("quizResult", JSON.stringify(result));
+        
+        // Adicionar informações de tempo e quantidade de perguntas
+        const enhancedResult = {
+          ...result,
+          totalQuestions: responses.length,
+          timeToComplete,
+          startedAt: startTime
+        };
+        
+        localStorage.setItem("quizResult", JSON.stringify(enhancedResult));
         router.push("/result");
       }
     }

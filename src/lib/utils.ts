@@ -53,3 +53,24 @@ export function shuffleArray<T>(array: T[]): T[] {
   }
   return shuffled;
 }
+
+/**
+ * Formata tempo em segundos para uma string legível
+ * @param seconds Tempo em segundos
+ * @returns String formatada (ex: "2min 30s", "1h 15min")
+ */
+export function formatTime(seconds: number | null): string {
+  if (!seconds || seconds <= 0) return "Não disponível";
+  
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes}min`;
+  } else if (minutes > 0) {
+    return `${minutes}min ${remainingSeconds}s`;
+  } else {
+    return `${remainingSeconds}s`;
+  }
+}

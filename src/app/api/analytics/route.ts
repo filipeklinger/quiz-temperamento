@@ -61,6 +61,9 @@ export async function GET() {
         age: result.age,
         dominantTemperament: result.dominantTemperament,
         temperamentScores: result.temperamentScores as Record<string, number>,
+        totalQuestions: result.totalQuestions || 12,
+        timeToComplete: result.timeToComplete,
+        startedAt: result.startedAt,
         completedAt: result.completedAt || result.createdAt || new Date(),
         createdAt: result.createdAt || new Date()
       }))

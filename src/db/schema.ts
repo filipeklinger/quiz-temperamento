@@ -36,6 +36,9 @@ export const quizResults = pgTable('quiz_results', {
   age: integer('age').notNull(),
   dominantTemperament: varchar('dominant_temperament', { length: 50 }).notNull(),
   temperamentScores: json('temperament_scores').notNull(), // JSON com as pontuações
+  totalQuestions: integer('total_questions').default(12), // Número total de perguntas respondidas
+  timeToComplete: integer('time_to_complete'), // Tempo em segundos para completar o quiz
+  startedAt: timestamp('started_at'), // Quando o quiz foi iniciado
   userAgent: text('user_agent'), // Para analytics básicas
   ipAddress: varchar('ip_address', { length: 45 }), // IPv4 ou IPv6
   completedAt: timestamp('completed_at').defaultNow(),

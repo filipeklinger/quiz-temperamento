@@ -4,6 +4,9 @@ export interface UserResult {
   age: number;
   dominantTemperament: string;
   temperamentScores: Record<string, number>;
+  totalQuestions: number;
+  timeToComplete: number | null; // em segundos
+  startedAt: Date | null;
   completedAt: Date;
   createdAt: Date;
 }

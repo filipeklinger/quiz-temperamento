@@ -53,7 +53,10 @@ function ResultContent() {
           birthDate: userData.birthDate,
           age: result.age,
           dominantTemperament: result.dominantTemperament,
-          temperamentScores: result.temperamentScores
+          temperamentScores: result.temperamentScores,
+          totalQuestions: result.totalQuestions,
+          timeToComplete: result.timeToComplete,
+          startedAt: result.startedAt
         })
       });
 

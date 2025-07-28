@@ -38,6 +38,9 @@ export interface QuizResult {
   age: number;
   description: string;
   title: string;
+  totalQuestions?: number;
+  timeToComplete?: number; // em segundos
+  startedAt?: Date;
 }
 
 export interface User {
