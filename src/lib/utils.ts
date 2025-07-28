@@ -39,3 +39,17 @@ export function parseBrazilianDate(dateStr: string): Date | null {
   
   return date;
 }
+
+/**
+ * Embaralha um array usando o algoritmo Fisher-Yates
+ * @param array Array para embaralhar
+ * @returns Novo array embaralhado
+ */
+export function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Question, Answer } from "@/types";
 import { useAccessibility } from "@/contexts/AccessibilityContext";
+import { shuffleArray } from "@/lib/utils";
 
 interface QuestionCardProps {
   question: Question;
@@ -23,6 +24,11 @@ export function QuestionCard({
 }: QuestionCardProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(selectedAnswerId || null);
   const { getFontSizeClass } = useAccessibility();
+
+  // Embaralhar as respostas uma única vez quando a pergunta mudar
+  const shuffledAnswers = useMemo(() => {
+    return shuffleArray(question.answers);
+  }, [question.id]); // Dependência apenas do ID da pergunta
 
   const handleAnswerClick = (answer: Answer) => {
     setSelectedAnswer(answer.id);
@@ -53,7 +59,7 @@ export function QuestionCard({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {question.answers.map((answer) => (
+          {shuffledAnswers.map((answer) => (
             <Button
               key={answer.id}
               variant={selectedAnswer === answer.id ? "default" : "outline"}
