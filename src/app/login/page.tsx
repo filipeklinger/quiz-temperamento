@@ -48,7 +48,7 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@temperamento.com"
+                placeholder="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -61,7 +61,7 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -74,11 +74,7 @@ export default function LoginPage() {
               {isLoading ? "Entrando..." : "Entrar"}
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm text-muted-foreground">
-            <p>Credenciais de teste:</p>
-            <p>Email: admin@temperamento.com</p>
-            <p>Senha: admin123</p>
-          </div>
+          
         </CardContent>
       </Card>
     </div>
