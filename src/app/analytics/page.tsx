@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AnalyticsData, UserResult } from "@/types/analytics";
 import { formatTime } from "@/lib/utils";
-import { ArrowLeft, Users, TrendingUp, Calendar, Trash2 } from "lucide-react";
+import { ArrowLeft, Users, TrendingUp, Calendar, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { 
   PieChart, 
   Pie, 
@@ -41,6 +41,8 @@ export default function AnalyticsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     // Verificar autenticação
@@ -144,6 +146,17 @@ export default function AnalyticsPage() {
     return `${day}/${month}/${year}`;
   };
 
+  // Calcular paginação
+  const totalResults = analytics?.results.length || 0;
+  const totalPages = Math.ceil(totalResults / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentResults = analytics?.results.slice(startIndex, endIndex) || [];
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="max-w-7xl mx-auto">
@@ -159,7 +172,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
           
-          {analytics && analytics.totalUsers > 0 && (
+          {/* {analytics && analytics.totalUsers > 0 && (
             <Button 
               onClick={() => setShowClearConfirm(true)} 
               variant="destructive"
@@ -168,7 +181,7 @@ export default function AnalyticsPage() {
               <Trash2 className="w-4 h-4 mr-2" />
               Limpar Dados
             </Button>
-          )}
+          )} */}
         </div>
 
         {/* Cards de Resumo */}
@@ -323,7 +336,7 @@ export default function AnalyticsPage() {
           <CardHeader>
             <CardTitle>Todos os Resultados</CardTitle>
             <CardDescription>
-              Lista completa de todos os usuários que fizeram o quiz
+              Lista completa de todos os usuários que fizeram o quiz ({totalResults} resultados)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -341,7 +354,7 @@ export default function AnalyticsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {analytics.results.map((result) => (
+                  {currentResults.map((result) => (
                     <tr key={result.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
                       <td className="p-2">{formatDate(result.completedAt.toString())}</td>
                       <td className="p-2">{formatDate(result.birthDate.toString())}</td>
@@ -365,7 +378,7 @@ export default function AnalyticsPage() {
                       </td>
                     </tr>
                   ))}
-                  {analytics.results.length === 0 && (
+                  {totalResults === 0 && (
                     <tr>
                       <td colSpan={7} className="p-4 text-center text-gray-500 dark:text-gray-400">
                         Nenhum resultado encontrado
@@ -375,6 +388,71 @@ export default function AnalyticsPage() {
                 </tbody>
               </table>
             </div>
+
+            {/* Controles de Paginação */}
+            {totalPages > 1 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t">
+                <div className="text-sm text-gray-600 dark:text-gray-300">
+                  Mostrando {startIndex + 1} a {Math.min(endIndex, totalResults)} de {totalResults} resultados
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Anterior
+                  </Button>
+                  
+                  <div className="flex items-center space-x-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                      // Mostrar apenas algumas páginas para evitar muitos botões
+                      const showPage = 
+                        page === 1 || 
+                        page === totalPages || 
+                        (page >= currentPage - 2 && page <= currentPage + 2);
+                      
+                      if (!showPage) {
+                        // Mostrar "..." apenas uma vez entre grupos
+                        if (page === currentPage - 3 || page === currentPage + 3) {
+                          return (
+                            <span key={page} className="px-2 py-1 text-gray-500">
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      }
+                      
+                      return (
+                        <Button
+                          key={page}
+                          variant={currentPage === page ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => handlePageChange(page)}
+                          className="w-8 h-8 p-0"
+                        >
+                          {page}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Próxima
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
