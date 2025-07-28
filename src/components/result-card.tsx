@@ -106,8 +106,8 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
           {(result.characteristics || result.strengths || result.developmentAreas) && (
             <div className="space-y-6">
               {result.characteristics && result.characteristics.length > 0 && (
-                <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-blue-500">
-                  <h4 className={`font-semibold mb-4 text-gray-800 flex items-center ${getFontSizeClass()}`}>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border-l-4 border-blue-500 border border-gray-200 dark:border-gray-700">
+                  <h4 className={`font-semibold mb-4 text-gray-800 dark:text-gray-200 flex items-center ${getFontSizeClass()}`}>
                     <span className="text-blue-500 mr-2">🎯</span>
                     Características Principais
                   </h4>
@@ -115,7 +115,7 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
                     {result.characteristics.map((characteristic, index) => (
                       <li key={index} className={`flex items-start space-x-2 ${getFontSizeClass()}`}>
                         <span className="text-blue-500 mt-1">•</span>
-                        <span className="text-gray-700">{characteristic}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{characteristic}</span>
                       </li>
                     ))}
                   </ul>
@@ -123,8 +123,8 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
               )}
 
               {result.strengths && result.strengths.length > 0 && (
-                <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-green-500">
-                  <h4 className={`font-semibold mb-4 text-gray-800 flex items-center ${getFontSizeClass()}`}>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border-l-4 border-green-500 border border-gray-200 dark:border-gray-700">
+                  <h4 className={`font-semibold mb-4 text-gray-800 dark:text-gray-200 flex items-center ${getFontSizeClass()}`}>
                     <span className="text-green-500 mr-2">💪</span>
                     Suas Forças
                   </h4>
@@ -132,7 +132,7 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
                     {result.strengths.map((strength, index) => (
                       <li key={index} className={`flex items-start space-x-2 ${getFontSizeClass()}`}>
                         <span className="text-green-500 mt-1">•</span>
-                        <span className="text-gray-700">{strength}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{strength}</span>
                       </li>
                     ))}
                   </ul>
@@ -140,8 +140,8 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
               )}
 
               {result.developmentAreas && result.developmentAreas.length > 0 && (
-                <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-orange-500">
-                  <h4 className={`font-semibold mb-4 text-gray-800 flex items-center ${getFontSizeClass()}`}>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border-l-4 border-orange-500 border border-gray-200 dark:border-gray-700">
+                  <h4 className={`font-semibold mb-4 text-gray-800 dark:text-gray-200 flex items-center ${getFontSizeClass()}`}>
                     <span className="text-orange-500 mr-2">🚀</span>
                     Áreas de Desenvolvimento
                   </h4>
@@ -149,7 +149,7 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
                     {result.developmentAreas.map((area, index) => (
                       <li key={index} className={`flex items-start space-x-2 ${getFontSizeClass()}`}>
                         <span className="text-orange-500 mt-1">•</span>
-                        <span className="text-gray-700">{area}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{area}</span>
                       </li>
                     ))}
                   </ul>
@@ -198,14 +198,14 @@ export function ResultCard({ result, onRestart, onShare }: ResultCardProps) {
             {/* Lista detalhada */}
             <div className="grid grid-cols-2 gap-4">
               {chartData.map((item) => (
-                <div key={item.name} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
+                <div key={item.name} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                   <div 
                     className="w-4 h-4 rounded-full" 
                     style={{ backgroundColor: item.color }}
                   ></div>
                   <div className="flex-1">
-                    <div className={`font-medium ${getFontSizeClass()}`}>{item.name}</div>
-                    <div className={`text-muted-foreground text-sm ${getFontSizeClass()}`}>
+                    <div className={`font-medium text-gray-900 dark:text-gray-100 ${getFontSizeClass()}`}>{item.name}</div>
+                    <div className={`text-gray-600 dark:text-gray-400 text-sm ${getFontSizeClass()}`}>
                       {item.value}% ({item.score} pontos)
                     </div>
                   </div>
